@@ -1,10 +1,7 @@
 # .gitignore
 
 **/tmp/
+**/__pycache__/
 *.tmp
 *~
-# .gitignore
 
-**/tmp/
-*.tmp
-*~
