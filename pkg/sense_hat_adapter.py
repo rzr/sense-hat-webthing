@@ -88,12 +88,10 @@ class SenseHatDevice(Device):
     def poll(self):
         """Poll the device for changes."""
         while True:
-            print("info: Adapter sleeping");
             time.sleep(_POLL_INTERVAL)
             try:
                 for prop in self.properties.values():
                     prop.update()
-                print("info: Adapter updated");
             except Exception as ex:
                 print("error: Polling properties: " + str(ex))
                 continue
