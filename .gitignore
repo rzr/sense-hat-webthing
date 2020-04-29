@@ -3,3 +3,8 @@
 **/tmp/
 *.tmp
 *~
+# .gitignore
+
+**/tmp/
+*.tmp
+*~
