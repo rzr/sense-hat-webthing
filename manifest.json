@@ -1,0 +1,19 @@
+{
+  "author": "Philippe Coval",
+  "description": "Sense Hat adapter plugin for Mozilla WebThings Gateway",
+  "gateway_specific_settings": {
+    "webthings": {
+      "exec": "python3 {path}/main.py",
+      "primary_type": "adapter",
+      "strict_max_version": "*",
+      "strict_min_version": "0.12.0"
+    }
+  },
+  "homepage_url": "https://github.com/rzr/sense-hat-webthing",
+  "id": "sense-hat-webthing",
+  "license": "MPL-2.0",
+  "manifest_version": 1,
+  "name": "Sense Hat",
+  "short_name": "Sense Hat",
+  "version": "0.0.0"
+}
