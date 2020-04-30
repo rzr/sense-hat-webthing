@@ -1,7 +1,7 @@
 {
   "name": "sense-hat-adapter",
   "display_name": "Sense Hat",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Sense Hat adapter plugin for Mozilla WebThings Gateway",
   "author": "Philippe Coval",
   "main": "main.py",
