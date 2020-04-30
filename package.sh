@@ -2,7 +2,7 @@
 # -*- mode: Bash; tab-width: 2; indent-tabs-mode: t; -*-
 # SPDX-License-Indentifier: MPL-2.0
 
-package="sense-hat-webthing"
+package="sense-hat-adapter"
 version=$(grep '"version":' manifest.json | cut -d: -f2 | cut -d\" -f2)
 date=$(git log -1 --date=short --pretty=format:%cd || date -u)
 
@@ -13,7 +13,7 @@ rm -rf *.tgz package SHA256SUMS
 mkdir package
 
 # Put package together
-cp -r pkg LICENSE manifest.json *.py *.sh README.md package/
+cp -r pkg LICENSE *.json *.py *.sh README.md *.txt package/
 find package -type f -name '*.pyc' -delete
 find package -type d -empty -delete
 
