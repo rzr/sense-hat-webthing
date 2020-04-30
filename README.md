@@ -5,6 +5,9 @@ https://img.shields.io/github/forks/rzr/sense-hat-webthing.svg?style=social&labe
 )](
 https://GitHub.com/rzr/sense-hat-webthing
 )
+![Mastodon Follow](
+https://img.shields.io/mastodon/follow/279303?domain=https%3A%2F%2Fmastodon.social&style=social
+)
 
 ## ABOUT ##
 
@@ -12,10 +15,35 @@ Addon adapter for Mozilla IoT Gateway
 using python module to handle I2C sensors and GPIOs
 of Raspberry Pi's extension board "SenseHat".
 
+[![sense-hat-webthing](
+https://repository-images.githubusercontent.com/259962704/f411a980-8aea-11ea-94f4-aad36c651769#./file/sense-hat-webthing.jpg
+)](
+https://mastodon.social/@rzr/104052909544715058#LavalVirtual2020
+"sense-hat-webthing")
+
 ## USAGE ##
 
-From add-on menu, add and enable add-on,
-then add "SenseHat" from the things dashboard.
+From add-on menu:
+
+- Add and enable add-on
+- Wait the time that dependencies are downloaded and setup
+  (ssh to look for "python3 -m pip install")
+- Then add "SenseHat" from the things dashboard.
+
+## DEVELOP ##
+
+```sh
+ssh pi@gateway.local
+sudo systemctl stop mozilla-iot-gateway
+rm -rf ~/.mozilla-iot/addons/sense-hat-*
+cd ~/.mozilla-iot/addons/
+git clone --depth 1  https://github.com/rzr/sense-hat-webthing sense-hat-adapter
+sudo systemctl restart mozilla-iot-gateway
+sudo journalctl -f -xu mozilla-iot-gateway.service
+```
+
+Note that instead of restarting gateway,
+from Web UI, any addon can disabled and enabled again.
 
 ## MORE ##
 
@@ -29,6 +57,7 @@ Thanks to Geof Cohler (@gcohler) for support.
 
 ## RESOURCES ##
 
+- <https://mastodon.social/@rzr/104052909544715058#LavalVirtual2020>
 - <https://discourse.mozilla.org/t/is-there-an-add-on-for-pi-sense-hat/58024/5>
 - <https://github.com/rzr/mozilla-iot-generic-sensors-adapter/issues/13>
 - <https://github.com/mozilla-iot/wiki/wiki#general-1>
@@ -37,4 +66,7 @@ Thanks to Geof Cohler (@gcohler) for support.
 - <https://www.raspberrypi.org/products/sense-hat/>
 - <https://www.raspberrypi.org/documentation/hardware/sense-hat/>
 - <https://github.com/astro-pi/python-sense-hat>
+- <https://pythonhosted.org/sense-hat/api/>
 - <https://projects.raspberrypi.org/en/projects/getting-started-with-the-sense-hat>
+- <https://github.com/mozilla-iot/tplink-adapter>
+- <https://github.com/mozilla-iot/eufy-adapter>
