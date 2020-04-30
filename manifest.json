@@ -10,7 +10,7 @@
     }
   },
   "homepage_url": "https://github.com/rzr/sense-hat-webthing",
-  "id": "sense-hat-webthing",
+  "id": "sense-hat-adapter",
   "license": "MPL-2.0",
   "manifest_version": 1,
   "name": "Sense Hat",
