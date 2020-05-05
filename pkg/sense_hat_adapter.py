@@ -64,6 +64,17 @@ class SenseHatDevice(Device):
         self.description = 'Expose SenseHat sensors and actuators'
         self._type = []
         try:
+            self.properties['humidity'] = SenseHatProperty(
+                self,
+                "humidity",
+                {
+                    '@type': 'NumberProperty',
+                    'label': "Humidity",
+                    'type': 'integer',
+                    'unit': '%',
+                    'readOnly': True
+                },
+                0)
             self.properties['temperature'] = SenseHatProperty(
                 self,
                 "temperature",
@@ -108,7 +119,9 @@ class SenseHatProperty(Property):
         self.set_cached_value(value)
 
     def update(self):
-        if self.name == 'temperature':
+        if self.name == 'humidity':
+            value = self.device.controller.humidity
+        elif self.name == 'temperature':
             value = self.device.controller.temperature
         else:
             print("warning: %s not handled" % self.name)
