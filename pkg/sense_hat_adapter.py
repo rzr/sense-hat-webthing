@@ -75,6 +75,15 @@ class SenseHatDevice(Device):
                     'readOnly': True
                 },
                 0)
+            self.properties['message'] = SenseHatProperty(
+                self,
+                "message",
+                {
+                    '@type': 'StringProperty',
+                    'label': "Message",
+                    'type': 'string'
+                },
+                "")
             self.properties['temperature'] = SenseHatProperty(
                 self,
                 "temperature",
@@ -129,3 +138,7 @@ class SenseHatProperty(Property):
         if value != self.value:
             self.set_cached_value(value)
             self.device.notify_property_changed(self)
+
+    def set_value(self, value):
+        if self.name == 'message':
+            self.device.controller.show_message(value)
