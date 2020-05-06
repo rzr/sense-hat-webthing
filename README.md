@@ -39,20 +39,29 @@ ssh pi@gateway.local # password=raspberry
 sudo systemctl stop mozilla-iot-gateway
 rm -rf ~/.mozilla-iot/addons/sense-hat-*
 cd ~/.mozilla-iot/addons/
+sudo apt-get remove -y \
+  libblas3 libgfortran5 libimagequant0 liblapack3 liblcms2-2 librtimulib-utils \
+  librtimulib7 libwebpdemux2 \
+  python3-numpy python3-olefile python3-pil  python3-rtimulib python3-sense-hat
+./setup.sh
 git clone --depth 1  https://github.com/rzr/sense-hat-webthing sense-hat-adapter
 sudo systemctl restart mozilla-iot-gateway
 sudo journalctl -f -xu mozilla-iot-gateway.service
 # From UI / Enable Addon
-#| (...)
-#| May 05 16:51:33 gateway run-app.sh[2496]: 2020-05-05 16:51:33.347 INFO   : sense-hat-adapter: The following NEW packages will be installed:
-#| May 05 16:51:33 gateway run-app.sh[2496]: 2020-05-05 16:51:33.351 INFO   : sense-hat-adapter:   libblas3 libgfortran5 libimagequant0 liblapack3 liblcms2-2 librtimulib-utils
-#| May 05 16:51:33 gateway run-app.sh[2496]: 2020-05-05 16:51:33.356 INFO   : sense-hat-adapter:   librtimulib7 libwebpdemux2 python3-numpy python3-olefile python3-pil
-#| May 05 16:51:33 gateway run-app.sh[2496]: 2020-05-05 16:51:33.359 INFO   : sense-hat-adapter:   python3-rtimulib python3-sense-hat
-#| (...)
 ```
 
 Note that instead of restarting gateway,
 from Web UI, any addon can disabled and enabled again.
+
+## EXTRA: EXAMPLE ##
+
+An extra example can be also used as standone webthing server:
+
+```sh
+cd example
+pip3 install webthing
+python sense-hat-single-thing.py
+```
 
 ## MORE ##
 
