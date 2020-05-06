@@ -12,7 +12,8 @@ import threading
 import time
 
 _POLL_INTERVAL = 5
-   
+
+
 class SenseHatAdapter(Adapter):
     """Adapter for Sense Hat"""
 
@@ -102,10 +103,9 @@ class SenseHatDevice(Device):
                     '@type': 'ColorProperty',
                     'label': "Color",
                     'type': 'string',
-                    'unit': '#RGBcolor',
                     'readOnly': False
                 },
-                '#FFFFFF')
+                '#ffffff')
             t = threading.Thread(target=self.poll)
             t.daemon = True
             t.start()
@@ -154,5 +154,10 @@ class SenseHatProperty(Property):
         if self.name == 'message':
             self.device.controller.show_message(value)
         elif self.name == 'color':
-            print("Setting color to %s" % value)
-            self.device.controller.clear(int(value.slice(1, 3)), int(value.slice(3, 5)), int(value.slice(5, 7)))
+            color = [int(value[1:3], 0x10),
+                     int(value[3:5], 0x10),
+                     int(value[5:7], 0x10)]
+            self.device.controller.clear(color)
+        else:
+            print("warning: %s not handled" % self.name)
+            return
