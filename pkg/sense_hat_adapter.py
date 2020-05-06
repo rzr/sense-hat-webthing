@@ -95,6 +95,17 @@ class SenseHatDevice(Device):
                     'readOnly': True
                 },
                 0)
+            self.properties['color'] = SenseHatProperty(
+                self,
+                "color",
+                {
+                    '@type': 'ColorProperty',
+                    'label': "Color",
+                    'type': 'string',
+                    'unit': '#RGBcolor',
+                    'readOnly': False
+                },
+                '#FFFFFF')
             t = threading.Thread(target=self.poll)
             t.daemon = True
             t.start()
@@ -142,3 +153,6 @@ class SenseHatProperty(Property):
     def set_value(self, value):
         if self.name == 'message':
             self.device.controller.show_message(value)
+        elif self.name == 'color':
+            print("Setting color to %s" % value)
+            self.device.controller.clear(int(value.slice(1, 3)), int(value.slice(3, 5)), int(value.slice(5, 7)))
