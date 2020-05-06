@@ -10,6 +10,8 @@ import signal
 import sys
 import time
 
+sys.path.append(path.join(path.dirname(path.abspath(__file__)), 'lib'))
+
 _DEBUG = False
 _ADAPTER = None
 
