@@ -59,6 +59,7 @@ class SenseHatDevice(Device):
         self.id = 'sense-hat'
         self.adapter = adapter
         self.controller = SenseHat()
+        self.controller.set_imu_config(False, True, False)
 
         self.name = 'Sense Hat'
         self.name = 'SenseHat'
@@ -106,6 +107,21 @@ class SenseHatDevice(Device):
                     'readOnly': False
                 },
                 '#ffffff')
+            self.properties['compass'] = SenseHatProperty(
+                self,
+                "compass",
+                {
+                    '@type': 'NumberProperty',
+                    'label': "Compass",
+                    'type': 'integer',
+                    'description': 'Angle to North ',
+                    'unit': 'º',
+                    'minimum': 0,
+                    'maximum': 360,
+                    'readOnly': True
+                },
+                0)
+
             t = threading.Thread(target=self.poll)
             t.daemon = True
             t.start()
@@ -143,6 +159,8 @@ class SenseHatProperty(Property):
             value = self.device.controller.humidity
         elif self.name == 'temperature':
             value = self.device.controller.temperature
+        elif self.name == 'compass':
+            value = self.device.controller.get_compass()
         else:
             print("warning: %s not handled" % self.name)
             return
