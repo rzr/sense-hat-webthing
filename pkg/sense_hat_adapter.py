@@ -72,7 +72,7 @@ class SenseHatDevice(Device):
                 'href': adapter.URL
             }
         ]
-        self._type = []
+        self._type = ['TemperatureSensor', 'ColorControl', 'Light', 'OnOffSwitch']
         try:
             self.properties['humidity'] = SenseHatProperty(
                 self,
@@ -109,9 +109,9 @@ class SenseHatDevice(Device):
                 self,
                 "temperature",
                 {
-                    '@type': 'NumberProperty',
+                    '@type': 'TemperatureProperty',
                     'label': "Temperature",
-                    'type': 'integer',
+                    'type': 'number',
                     'unit': 'ºC',
                     'readOnly': True
                 },
@@ -121,12 +121,21 @@ class SenseHatDevice(Device):
                 "color",
                 {
                     '@type': 'ColorProperty',
-                    'label': "Color",
+                    'label': "Light Color",
                     'type': 'string',
                     'readOnly': False
                 },
                 '#ffffff')
-
+            self.properties['on'] = SenseHatProperty(
+                self,
+                "on",
+                {
+                    '@type': 'OnOffProperty',
+                    'label': "Light Switch",
+                    'type': 'boolean',
+                    'readOnly': False
+                },
+                True)
             self.properties['compass'] = SenseHatProperty(
                 self,
                 "compass",
@@ -245,13 +254,28 @@ class SenseHatProperty(Property):
             self.device.notify_property_changed(self)
 
     def set_value(self, value):
+        print("info: sense_hat." + self.name + " from " + str(self.value) + " to " + str(value))
         if self.name == 'message':
             self.device.controller.show_message(value)
         elif self.name == 'color':
-            color = [int(value[1:3], 0x10),
-                     int(value[3:5], 0x10),
-                     int(value[5:7], 0x10)]
-            self.device.controller.clear(color)
+            if self.device.properties['on'].value and (value != self.value):
+                color = [int(value[1:3], 0x10),
+                         int(value[3:5], 0x10),
+                         int(value[5:7], 0x10)]
+                self.device.controller.clear(color)
+        elif self.name == 'on':
+            if value == False:
+                self.device.controller.clear([0, 0, 0])
+            else:
+                colorString = self.device.properties['color'].value
+                color = [int(colorString[1:3], 0x10),
+                         int(colorString[3:5], 0x10),
+                         int(colorString[5:7], 0x10)]
+                self.device.controller.clear(color)
         else:
             print("warning: %s not handled" % self.name)
             return
+        if value != self.value:
+            self.set_cached_value(value)
+            self.device.notify_property_changed(self)
+
