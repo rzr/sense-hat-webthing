@@ -1,0 +1,13 @@
+# .dockerignore
+.git
+
+# .gitignore
+
+**/tmp/
+**/__pycache__/
+*.tmp
+*~
+*.tgz
+*.sha256sum
+.project
+lib/
