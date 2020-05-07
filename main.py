@@ -3,12 +3,15 @@
 
 """SenseHat adapter for Mozilla WebThings Gateway."""
 
-from pkg.sense_hat_adapter import SenseHatAdapter
 from os import path
 import functools
 import signal
 import sys
 import time
+
+sys.path.append(path.join(path.dirname(path.abspath(__file__)), 'lib'))
+
+from pkg.sense_hat_adapter import SenseHatAdapter
 
 _DEBUG = False
 _ADAPTER = None

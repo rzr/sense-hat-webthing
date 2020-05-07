@@ -1,1 +1,4 @@
+# -*- coding: utf-8 -*- 
 sense_hat==2.2.0
+# TODO: https://github.com/astro-pi/python-sense-hat/issues/58#issuecomment-624958208
+git+https://github.com/RPi-Distro/RTIMULib@V7.2.1#subdirectory=Linux/python
