@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- mode: python; python-indent-offset: 4; indent-tabs-mode: nil -*-
 # SPDX-License-Indentifier: MPL-2.0
 
