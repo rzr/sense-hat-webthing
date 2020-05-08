@@ -86,6 +86,17 @@ class SenseHatDevice(Device):
                     'type': 'string'
                 },
                 "")
+            self.properties['pressure'] = SenseHatProperty(
+                self,
+                "pressure",
+                {
+                    '@type': 'NumberProperty',
+                    'label': "Pressure",
+                    'readOnly': True,
+                    'type': 'number',
+                    'unit': 'hPa'
+                },
+                0)
             self.properties['temperature'] = SenseHatProperty(
                 self,
                 "temperature",
@@ -157,6 +168,8 @@ class SenseHatProperty(Property):
     def update(self):
         if self.name == 'humidity':
             value = self.device.controller.humidity
+        elif self.name == 'pressure':
+            value = self.device.controller.get_pressure()
         elif self.name == 'temperature':
             value = self.device.controller.temperature
         elif self.name == 'compass':
