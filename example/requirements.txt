@@ -1,0 +1,3 @@
+# -*- coding: utf-8 -*- 
+# SPDX-License-Indentifier: MPL-2.0
+webthing>=0.12.0
