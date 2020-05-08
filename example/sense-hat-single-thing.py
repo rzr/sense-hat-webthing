@@ -24,34 +24,34 @@ class SenseHatThing(Thing):
         )
         self.sense = SenseHat()
         self.sense.set_imu_config(False, True, False)
-        self.level = Value(0.0)
+        self.compass = Value(0.0)
         self.add_property(
             Property(self,
-                     'level',
-                     self.level,
+                     'compass',
+                     self.compass,
                      metadata=
-                     {'title': 'Angle',
+                     {'title': 'Compass',
                       'type': 'number',
-                      'description': 'North',
+                      'description': 'Angle to North',
+                      'unit': 'º',
                       'minimum': 0,
                       'maximum': 360,
-                      'unit': 'degrees',
                       'readOnly': True,
                      }))
 
         logging.debug('starting the sensor update looping task')
         self.timer = tornado.ioloop.PeriodicCallback(
-            self.update_level,
+            self.update_properties,
             1000
         )
         self.timer.start()
 
-    def update_level(self):
-        new_level = self.sense.get_compass()
-        logging.debug("setting new compass level: %s", new_level)
-        self.level.notify_of_external_update(new_level)
+    def update_properties(self):
+        compass = self.sense.get_compass()
+        logging.debug("update: compass=%s", compass)
+        self.compass.notify_of_external_update(compass)
 
-    def cancel_update_level_task(self):
+    def cancel_update_properties_task(self):
         self.timer.stop()
 
 
