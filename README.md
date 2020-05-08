@@ -5,6 +5,16 @@ https://img.shields.io/github/forks/rzr/sense-hat-webthing.svg?style=social&labe
 )](
 https://GitHub.com/rzr/sense-hat-webthing
 )
+[![PyPi](
+https://img.shields.io/pypi/v/sense-hat-webthing.svg
+)](
+https://pypi.org/project/sense-hat-webthing/
+)
+[![Legal](
+https://img.shields.io/badge/license-MPL--2.0-blue.svg
+)](
+https://github.com/rzr/sense-hat-webthing/blob/master/LICENSE
+)
 ![Mastodon Follow](
 https://img.shields.io/mastodon/follow/279303?domain=https%3A%2F%2Fmastodon.social&style=social
 )
@@ -76,6 +86,8 @@ Thanks to Geof Cohler (@gcohler) for support.
 
 ## RESOURCES ##
 
+- <https://libraries.io/pypi/sense-hat-webthing>
+- <https://pypi.org/project/sense-hat-webthing/>
 - <https://mastodon.social/@rzr/104052909544715058#LavalVirtual2020>
 - <https://github.com/mozilla-iot/addon-list/pull/822>
 - <https://discourse.mozilla.org/t/is-there-an-add-on-for-pi-sense-hat/58024/5>
