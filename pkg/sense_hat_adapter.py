@@ -28,6 +28,7 @@ class SenseHatAdapter(Adapter):
         self.addon_name = 'sense-hat'
         self.DEBUG = True
         self.name = self.__class__.__name__
+        self.URL = 'https://github.com/rzr/sense-hat-webthing'
         Adapter.__init__(self,
                          self.addon_name, self.addon_name, verbose=verbose)
 
@@ -64,6 +65,13 @@ class SenseHatDevice(Device):
         self.name = 'Sense Hat'
         self.name = 'SenseHat'
         self.description = 'Expose SenseHat sensors and actuators'
+        self.links = [
+            {
+                'rel': 'alternate',
+                'mediaType': 'text/html',
+                'href': adapter.URL
+            }
+        ]
         self._type = []
         try:
             self.properties['humidity'] = SenseHatProperty(
