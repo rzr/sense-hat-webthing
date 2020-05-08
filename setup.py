@@ -21,7 +21,7 @@ URL = 'https://github.com/rzr/sense-hat-webthing'
 
 setup(
     name='sense-hat-webthing',
-    version='0.0.0',
+    version='0.0.4',
     description='Sense Hat WebThing',
     long_description=long_description,
     url=URL,
