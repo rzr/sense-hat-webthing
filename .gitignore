@@ -2,9 +2,11 @@
 
 **/tmp/
 **/__pycache__/
+*.egg-info/
 *.tmp
 *~
 *.tgz
 *.sha256sum
 .project
+dist/
 lib/
