@@ -24,6 +24,7 @@ setup(
     version='0.0.4',
     description='Sense Hat WebThing',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     url=URL,
     author='Philippe Coval',
     author_email='rzr@users.sf.net',
