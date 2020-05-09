@@ -135,7 +135,7 @@ class SenseHatDevice(Device):
                     'type': 'boolean',
                     'readOnly': False
                 },
-                True)
+                False)
             self.properties['compass'] = SenseHatProperty(
                 self,
                 "compass",
@@ -256,7 +256,18 @@ class SenseHatProperty(Property):
     def set_value(self, value):
         print("info: sense_hat." + self.name + " from " + str(self.value) + " to " + str(value))
         if self.name == 'message':
-            self.device.controller.show_message(value)
+            if not self.device.properties['on'].value:
+                bgColor = [0, 0, 0]
+            else:
+                colorString = self.device.properties['color'].value
+                bgColor = [int(colorString[1:3], 0x10),
+                           int(colorString[3:5], 0x10),
+                           int(colorString[5:7], 0x10)]
+            fgColor = [~ int(hex(bgColor[0]), 0x10) & 0xFF,
+                       ~ int(hex(bgColor[1]), 0x10) & 0xFF,
+                       ~ int(hex(bgColor[2]), 0x10) & 0xFF]
+            self.device.controller.show_message(value, 0.1, fgColor, bgColor);
+
         elif self.name == 'color':
             if self.device.properties['on'].value and (value != self.value):
                 color = [int(value[1:3], 0x10),
