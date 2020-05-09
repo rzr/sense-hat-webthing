@@ -14,6 +14,6 @@ case "$id" in
         ;;
     *)
         echo "warning: Not supported: $id trying pip"
-        sudo pip3 install sense_hat
+        sudo pip3 install -r requirements.txt
         ;;
 esac
