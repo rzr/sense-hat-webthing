@@ -8,5 +8,6 @@
 *.tgz
 *.sha256sum
 .project
+SHA256SUMS
 dist/
 lib/
