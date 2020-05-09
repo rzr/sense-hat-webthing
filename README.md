@@ -26,12 +26,23 @@ using python module to handle I2C sensors and GPIOs
 of Raspberry Pi's extension board "SenseHat".
 
 [![sense-hat-webthing](
-https://repository-images.githubusercontent.com/259962704/f411a980-8aea-11ea-94f4-aad36c651769#./file/sense-hat-webthing.jpg
+https://repository-images.githubusercontent.com/259962704/e9f36600-92b5-11ea-9df7-c3e38c5af4dd#./file/sense-hat-adapter-0.0.5.png
 )](
-https://mastodon.social/@rzr/104052909544715058#LavalVirtual2020
+https://mastodon.social/@rzr/104143644945748115#:sensehat:
 "sense-hat-webthing")
 
 ## USAGE ##
+
+### PREREQUISITES ###
+
+Install mozilla WebThing gateway on RaspberryPI (It was made for 
+https://github.com/mozilla-iot/gateway/releases/download/0.12.0/gateway-0.12.0.img.zip
+)
+
+- Connect to device's wifi "WebThings Gateway FFFF" and then open http://gateway.local/,  Setup WiFi Setup
+- Connect back to LAN Wifi open http://gateway.local/things again
+
+### INSTALL ###
 
 From "Settings" add-on menu:
 
@@ -47,14 +58,8 @@ ssh pi@gateway.local # password=raspberry
 sudo systemctl stop mozilla-iot-gateway
 rm -rf ~/.mozilla-iot/addons/sense-hat-*
 cd ~/.mozilla-iot/addons/
-sudo apt-get remove -y \
-  libblas3 libgfortran5 libimagequant0 liblapack3 liblcms2-2 librtimulib-utils \
-  librtimulib7 libwebpdemux2 \
-  python3-numpy python3-olefile python3-pil  python3-rtimulib python3-sense-hat
 git clone https://github.com/rzr/sense-hat-webthing sense-hat-adapter
-cd sense-hat-adapter
-./setup.sh
-python3 main.py
+make -C sense-hat-adapter help prep start # unprep # to restore
 sudo systemctl restart mozilla-iot-gateway
 sudo journalctl -f -xu mozilla-iot-gateway.service
 ```
@@ -64,15 +69,23 @@ From "/things" webpage "SenseHat" can be added (+, Add, Done)
 Note that instead of restarting gateway,
 from Web UI, any addon can disabled and enabled again.
 
-## EXTRA: EXAMPLE ##
+## EXTRA: EXAMPLES ##
 
-An extra example can be also used as standone webthing server:
+More examples can be also used as standone webthing server:
 
 ```sh
 cd example
-pip3 install webthing
-python sense-hat-single-thing.py
+# If on debian, it will be faster:
+sudo apt-get install python3-sense-hat 
+pip3 install webthing 
+# Or if not on debian:
+# pip3 install -r requirements.txt 
+./sense-hat-single-thing.py
 ```
+
+Then add thing using "URL" adapter it should be discovered as (http://localhost:8888)
+
+Same procedure for other exampl, like multiple things which is handling orientation sensor.
 
 ## MORE ##
 
@@ -101,8 +114,15 @@ Thanks to Geof Cohler (@gcohler) for support.
 - <https://www.raspberrypi.org/documentation/hardware/sense-hat/>
 - <https://github.com/astro-pi/python-sense-hat>
 - <https://pythonhosted.org/sense-hat/api/>
+- <https://github.com/raspberrypi/rpi-sense/>
 - <https://projects.raspberrypi.org/en/projects/getting-started-with-the-sense-hat>
 - <https://iot.mozilla.org/schemas/>
 - <https://github.com/mozilla-iot/webthing-python/>
 - <https://github.com/mozilla-iot/tplink-adapter>
 - <https://github.com/mozilla-iot/eufy-adapter>
+
+[![sense-hat-webthing](
+https://repository-images.githubusercontent.com/259962704/f411a980-8aea-11ea-94f4-aad36c651769#./file/sense-hat-webthing.jpg
+)](
+https://mastodon.social/@rzr/104052909544715058#LavalVirtual2020
+"sense-hat-webthing")
