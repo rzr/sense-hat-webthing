@@ -126,6 +126,7 @@ class SenseHatDevice(Device):
                     'readOnly': False
                 },
                 '#ffffff')
+
             self.properties['compass'] = SenseHatProperty(
                 self,
                 "compass",
@@ -141,9 +142,55 @@ class SenseHatDevice(Device):
                 },
                 0)
 
+            self.properties['down'] = SenseHatProperty(
+                self,
+                "down",
+                {
+                    '@type': 'PushedProperty',
+                    'label': "Down",
+                    'type': 'boolean',
+                    'readOnly': True
+                },
+                False)
+            self.properties['left'] = SenseHatProperty(
+                self,
+                "left",
+                {
+                    '@type': 'PushedProperty',
+                    'label': "Left",
+                    'type': 'boolean',
+                    'readOnly': True
+                },
+                False)
+            self.properties['right'] = SenseHatProperty(
+                self,
+                "right",
+                {
+                    '@type': 'PushedProperty',
+                    'label': "Right",
+                    'type': 'boolean',
+                    'readOnly': True
+                },
+                False)
+            self.properties['up'] = SenseHatProperty(
+                self,
+                "up",
+                {
+                    '@type': 'PushedProperty',
+                    'label': "Up",
+                    'type': 'boolean',
+                    'readOnly': True
+                },
+                False)
+
             t = threading.Thread(target=self.poll)
             t.daemon = True
             t.start()
+
+            events = threading.Thread(target=self.handle_events)
+            events.daemon = True
+            events.start()
+
             self.pairing = True
             print("info: Adapter started")
 
@@ -159,8 +206,15 @@ class SenseHatDevice(Device):
                     prop.update()
             except Exception as ex:
                 print("error: Polling properties: " + str(ex))
+                print(prop.name)
                 continue
 
+    def handle_events(self):
+        while True:
+             event = self.controller.stick.wait_for_event(True)
+             prop = self.properties[event.direction]
+             value = True if (str(event.action) == 'held') else False
+             prop.set_cached_value_and_notify(value)
 
 class SenseHatProperty(Property):
 
@@ -183,7 +237,8 @@ class SenseHatProperty(Property):
         elif self.name == 'compass':
             value = self.device.controller.get_compass()
         else:
-            print("warning: %s not handled" % self.name)
+            if False:
+                print("warning: %s update: not handled" % self.name)
             return
         if value != self.value:
             self.set_cached_value(value)
