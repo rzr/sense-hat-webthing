@@ -122,7 +122,7 @@ Thanks to Geof Cohler (@gcohler) for support.
 - <https://github.com/mozilla-iot/eufy-adapter>
 
 [![sense-hat-webthing](
-https://repository-images.githubusercontent.com/259962704/f411a980-8aea-11ea-94f4-aad36c651769#./file/sense-hat-webthing.jpg
+https://files.mastodon.social/media_attachments/files/027/879/770/small/2711ddf5ac31f8bf.jpeg#./file/sense-hat-webthing.jpg
 )](
 https://mastodon.social/@rzr/104052909544715058#LavalVirtual2020
 "sense-hat-webthing")
