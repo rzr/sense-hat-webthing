@@ -3,6 +3,7 @@
 
 """SenseHat adapter for Mozilla WebThings Gateway."""
 
+from sense_hat import SenseHat
 from gateway_addon import Adapter
 from .sense_hat_device import SenseHatDevice
 
@@ -26,6 +27,7 @@ class SenseHatAdapter(Adapter):
                          self.addon_name, self.addon_name, verbose=verbose)
 
         try:
+            self.controller = SenseHat()
             device = SenseHatDevice(self)
             self.handle_device_added(device)
             if self.DEBUG:

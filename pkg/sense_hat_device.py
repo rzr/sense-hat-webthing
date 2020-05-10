@@ -21,7 +21,7 @@ class SenseHatDevice(Device):
         self._id = 'sense-hat'
         self.id = 'sense-hat'
         self.adapter = adapter
-        self.controller = SenseHat()
+        self.controller = adapter.controller
         self.controller.set_imu_config(False, True, False)
 
         self.name = 'Sense Hat'
