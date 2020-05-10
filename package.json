@@ -26,7 +26,9 @@
     "SHA256SUMS",
     "main.py",
     "pkg/__init__.py",
-    "pkg/sense_hat_adapter.py"
+    "pkg/sense_hat_adapter.py",
+    "pkg/sense_hat_device.py",
+    "pkg/sense_hat_light_device.py"
   ],
   "moziot": {
     "api": {
