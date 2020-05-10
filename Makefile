@@ -16,7 +16,7 @@ help:
 	@echo "# make start # To start adapter"
 	@echo "# make unprep # To remove dev deps"
 	@echo "# make rule/version/X.Y.Z # To update manifest"
-	@echo "# make rule/version/X.Y.Z # To update addon-list"
+	@echo "# make rule/release/X.Y.Z # To update addon-list"
 
 start: main.py
 	${<D}/${<F}
@@ -42,7 +42,7 @@ rule/version/%: manifest.json package.json setup.py
 
 
 rule/release/%: ${addons_json} rule/version/%
-	sed -e "s|\(\"version\":\) .*|\1 \"${@F}\"|g" -i $<
+	sed -e "s|\(\"version\":\)\([0-9.]*\)\(\".*\)|\1${@F}\3|g" -i $<
 	sed -e "s|\(.*/${project}-\)\([0-9.]*\)\(-.*\)|\1${@F}\3|g" -i $<
 	cd ${<D} \
 && git --no-pager diff \
@@ -50,4 +50,4 @@ rule/release/%: ${addons_json} rule/version/%
 
 ${addons_json}:
 	mkdir -p "${addons_dir}"
-	git clone --depth 1 ${addons_url} "${addons_dir}"
+	git clone ${addons_url} "${addons_dir}"
