@@ -116,6 +116,18 @@ class SenseHatDevice(Device):
                     'readOnly': True
                 },
                 0)
+            self.properties['rotation'] = SenseHatProperty(
+                self,
+                "rotation",
+                {
+                    '@type': 'NumberProperty',
+                    'label': "Light Rotation",
+                    'type': 'integer',
+                    'description': 'Rotation of LED matrix',
+                    'unit': 'degrees',
+                    'enum': [0, 90, 180, 270]
+                },
+                0)
             self.properties['color'] = SenseHatProperty(
                 self,
                 "color",
@@ -150,7 +162,6 @@ class SenseHatDevice(Device):
                     'readOnly': True
                 },
                 0)
-
             self.properties['down'] = SenseHatProperty(
                 self,
                 "down",
@@ -191,7 +202,6 @@ class SenseHatDevice(Device):
                     'readOnly': True
                 },
                 False)
-
             t = threading.Thread(target=self.poll)
             t.daemon = True
             t.start()
@@ -283,6 +293,12 @@ class SenseHatProperty(Property):
                          int(colorString[3:5], 0x10),
                          int(colorString[5:7], 0x10)]
                 self.device.controller.clear(color)
+        elif self.name == 'rotation':
+            if value != 0 and value != 90 and value != 180 and value != 270:
+                print("warning: rotation must be 0, 90, 180 or 270")
+                return
+            if value != self.value:
+                self.device.controller.set_rotation(value)
         else:
             print("warning: %s not handled" % self.name)
             return
