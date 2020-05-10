@@ -6,6 +6,7 @@
 from sense_hat import SenseHat
 from gateway_addon import Adapter
 from .sense_hat_device import SenseHatDevice
+from .sense_hat_light_device import SenseHatLightDevice
 
 
 class SenseHatAdapter(Adapter):
@@ -31,9 +32,16 @@ class SenseHatAdapter(Adapter):
             device = SenseHatDevice(self)
             self.handle_device_added(device)
             if self.DEBUG:
-                print("sense_hat_device created")
-            self.devices['sense-hat'].connected = True
-            self.devices['sense-hat'].connected_notify(True)
+                 print("sense_hat_device created")
+            self.devices[device.id].connected = True
+            self.devices[device.id].connected_notify(True)
+            
+            lightDevice = SenseHatLightDevice(self)
+            self.handle_device_added(lightDevice)
+            if self.DEBUG:
+                print("sense_hat_light_device created")
+            self.devices[lightDevice.id].connected = True
+            self.devices[lightDevice.id].connected_notify(True)
 
         except Exception as ex:
-            print("Could not create sense_hat_device: " + str(ex))
+            print("error: Could not create sense_hat_device: " + str(ex))

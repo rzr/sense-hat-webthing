@@ -4,7 +4,11 @@
 """SenseHat adapter for Mozilla WebThings Gateway."""
 
 from sense_hat import SenseHat
-from gateway_addon import Adapter, Database, Device, Property
+from gateway_addon import Device, Property
+import threading
+import time
+
+_POLL_INTERVAL = 5
 
 class SenseHatDevice(Device):
     """SenseHat device type."""
@@ -26,7 +30,7 @@ class SenseHatDevice(Device):
 
         self.name = 'Sense Hat'
         self.name = 'SenseHat'
-        self.description = 'Expose SenseHat sensors and actuators'
+        self.description = 'Expose SenseHat sensors'
         self.links = [
             {
                 'rel': 'alternate',
@@ -34,7 +38,7 @@ class SenseHatDevice(Device):
                 'href': adapter.URL
             }
         ]
-        self._type = ['TemperatureSensor', 'ColorControl', 'Light', 'OnOffSwitch']
+        self._type = ['TemperatureSensor']
         try:
             self.properties['humidity'] = SenseHatProperty(
                 self,
@@ -47,15 +51,6 @@ class SenseHatDevice(Device):
                     'readOnly': True
                 },
                 0)
-            self.properties['message'] = SenseHatProperty(
-                self,
-                "message",
-                {
-                    '@type': 'StringProperty',
-                    'label': "Message",
-                    'type': 'string'
-                },
-                "")
             self.properties['pressure'] = SenseHatProperty(
                 self,
                 "pressure",
@@ -78,38 +73,6 @@ class SenseHatDevice(Device):
                     'readOnly': True
                 },
                 0)
-            self.properties['rotation'] = SenseHatProperty(
-                self,
-                "rotation",
-                {
-                    '@type': 'NumberProperty',
-                    'label': "Light Rotation",
-                    'type': 'integer',
-                    'description': 'Rotation of LED matrix',
-                    'unit': 'degrees',
-                    'enum': [0, 90, 180, 270]
-                },
-                0)
-            self.properties['color'] = SenseHatProperty(
-                self,
-                "color",
-                {
-                    '@type': 'ColorProperty',
-                    'label': "Light Color",
-                    'type': 'string',
-                    'readOnly': False
-                },
-                '#ffffff')
-            self.properties['on'] = SenseHatProperty(
-                self,
-                "on",
-                {
-                    '@type': 'OnOffProperty',
-                    'label': "Light Switch",
-                    'type': 'boolean',
-                    'readOnly': False
-                },
-                False)
             self.properties['compass'] = SenseHatProperty(
                 self,
                 "compass",
@@ -220,49 +183,6 @@ class SenseHatProperty(Property):
         else:
             if False:
                 print("warning: %s update: not handled" % self.name)
-            return
-        if value != self.value:
-            self.set_cached_value(value)
-            self.device.notify_property_changed(self)
-
-    def set_value(self, value):
-        print("info: sense_hat." + self.name + " from " + str(self.value) + " to " + str(value))
-        if self.name == 'message':
-            if not self.device.properties['on'].value:
-                bgColor = [0, 0, 0]
-            else:
-                colorString = self.device.properties['color'].value
-                bgColor = [int(colorString[1:3], 0x10),
-                           int(colorString[3:5], 0x10),
-                           int(colorString[5:7], 0x10)]
-            fgColor = [~ int(hex(bgColor[0]), 0x10) & 0xFF,
-                       ~ int(hex(bgColor[1]), 0x10) & 0xFF,
-                       ~ int(hex(bgColor[2]), 0x10) & 0xFF]
-            self.device.controller.show_message(value, 0.1, fgColor, bgColor);
-
-        elif self.name == 'color':
-            if self.device.properties['on'].value and (value != self.value):
-                color = [int(value[1:3], 0x10),
-                         int(value[3:5], 0x10),
-                         int(value[5:7], 0x10)]
-                self.device.controller.clear(color)
-        elif self.name == 'on':
-            if value == False:
-                self.device.controller.clear([0, 0, 0])
-            else:
-                colorString = self.device.properties['color'].value
-                color = [int(colorString[1:3], 0x10),
-                         int(colorString[3:5], 0x10),
-                         int(colorString[5:7], 0x10)]
-                self.device.controller.clear(color)
-        elif self.name == 'rotation':
-            if value != 0 and value != 90 and value != 180 and value != 270:
-                print("warning: rotation must be 0, 90, 180 or 270")
-                return
-            if value != self.value:
-                self.device.controller.set_rotation(value)
-        else:
-            print("warning: %s not handled" % self.name)
             return
         if value != self.value:
             self.set_cached_value(value)
