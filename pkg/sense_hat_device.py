@@ -69,7 +69,7 @@ class SenseHatDevice(Device):
                     '@type': 'TemperatureProperty',
                     'label': "Temperature",
                     'type': 'number',
-                    'unit': 'ºC',
+                    'unit': 'degrees celsius',
                     'readOnly': True
                 },
                 0)
