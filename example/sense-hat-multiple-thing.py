@@ -25,26 +25,12 @@ class SenseHatThingSensor(Thing):
             'A web connected sense hat'
         )
         controller.set_imu_config(True, True, True)
-        self.compass = Value(0.0)
-        self.add_property(
-            Property(self,
-                     'compass',
-                     self.compass,
-                     metadata=
-                     {'title': 'Compass',
-                      'type': 'number',
-                      'description': 'Angle to North',
-                      'unit': 'º',
-                      'minimum': 0,
-                      'maximum': 360,
-                      'readOnly': True,
-                     }))
 
-        self.orientation_pitch = Value(0.0)
+        self.pitch = Value(0.0)
         self.add_property(
             Property(self,
-                     'orientation_pitch',
-                     self.orientation_pitch,
+                     'pitch',
+                     self.pitch,
                      metadata=
                      {'title': 'Pitch',
                       'type': 'number',
@@ -55,11 +41,11 @@ class SenseHatThingSensor(Thing):
                       'readOnly': True,
                      }))
 
-        self.orientation_roll = Value(0.0)
+        self.roll = Value(0.0)
         self.add_property(
             Property(self,
-                     'orientation-roll',
-                     self.orientation_roll,
+                     'roll',
+                     self.roll,
                      metadata=
                      {'title': 'Roll',
                       'type': 'number',
@@ -70,11 +56,11 @@ class SenseHatThingSensor(Thing):
                       'readOnly': True,
                      }))
 
-        self.orientation_yaw = Value(0.0)
+        self.yaw = Value(0.0)
         self.add_property(
             Property(self,
-                     'orientation_yaw',
-                     self.orientation_yaw,
+                     'yaw',
+                     self.yaw,
                      metadata=
                      {'title': 'Yaw',
                       'type': 'number',
@@ -94,11 +80,9 @@ class SenseHatThingSensor(Thing):
 
     def update_properties(self):
         orientation = controller.get_orientation()
-        self.orientation_pitch.notify_of_external_update(orientation["pitch"])
-        self.orientation_roll.notify_of_external_update(orientation["roll"])
-        self.orientation_yaw.notify_of_external_update(orientation["yaw"])
-        compass = controller.get_compass()
-        self.compass.notify_of_external_update(compass)
+        self.pitch.notify_of_external_update(orientation['pitch'])
+        self.roll.notify_of_external_update(orientation['roll'])
+        self.yaw.notify_of_external_update(orientation['yaw'])
 
     def cancel_update_properties_task(self):
         self.timer.stop()
