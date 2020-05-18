@@ -51,3 +51,6 @@ rule/release/%: ${addons_json} rule/version/%
 ${addons_json}:
 	mkdir -p "${addons_dir}"
 	git clone ${addons_url} "${addons_dir}"
+
+lint:
+	pylint3 *.py */*.py
