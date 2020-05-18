@@ -26,7 +26,6 @@ class SenseHatDevice(Device):
         self.id = 'sense-hat'
         self.adapter = adapter
         self.controller = adapter.controller
-        self.controller.set_imu_config(False, True, False)
 
         self.name = 'SenseHat'
         self.description = 'Expose SenseHat sensors'
@@ -69,20 +68,6 @@ class SenseHatDevice(Device):
                     'label': "Temperature",
                     'type': 'number',
                     'unit': 'degrees celsius',
-                    'readOnly': True
-                },
-                0)
-            self.properties['compass'] = SenseHatProperty(
-                self,
-                "compass",
-                {
-                    '@type': 'NumberProperty',
-                    'label': "Compass",
-                    'type': 'integer',
-                    'description': 'Angle to North ',
-                    'unit': 'º',
-                    'minimum': 0,
-                    'maximum': 360,
                     'readOnly': True
                 },
                 0)
@@ -177,8 +162,6 @@ class SenseHatProperty(Property):
             value = self.device.controller.get_pressure()
         elif self.name == 'temperature':
             value = self.device.controller.temperature
-        elif self.name == 'compass':
-            value = self.device.controller.get_compass()
         else:
             if False:
                 print("warning: %s update: not handled" % self.name)
