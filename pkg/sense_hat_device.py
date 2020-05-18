@@ -28,7 +28,6 @@ class SenseHatDevice(Device):
         self.controller = adapter.controller
         self.controller.set_imu_config(False, True, False)
 
-        self.name = 'Sense Hat'
         self.name = 'SenseHat'
         self.description = 'Expose SenseHat sensors'
         self.links = [
@@ -64,7 +63,7 @@ class SenseHatDevice(Device):
                 0)
             self.properties['temperature'] = SenseHatProperty(
                 self,
-                "temperature",
+                'temperature',
                 {
                     '@type': 'TemperatureProperty',
                     'label': "Temperature",
@@ -89,7 +88,7 @@ class SenseHatDevice(Device):
                 0)
             self.properties['down'] = SenseHatProperty(
                 self,
-                "down",
+                'down',
                 {
                     '@type': 'PushedProperty',
                     'label': "Down",
@@ -99,7 +98,7 @@ class SenseHatDevice(Device):
                 False)
             self.properties['left'] = SenseHatProperty(
                 self,
-                "left",
+                'left',
                 {
                     '@type': 'PushedProperty',
                     'label': "Left",
@@ -109,7 +108,7 @@ class SenseHatDevice(Device):
                 False)
             self.properties['right'] = SenseHatProperty(
                 self,
-                "right",
+                'right',
                 {
                     '@type': 'PushedProperty',
                     'label': "Right",
@@ -119,7 +118,7 @@ class SenseHatDevice(Device):
                 False)
             self.properties['up'] = SenseHatProperty(
                 self,
-                "up",
+                'up',
                 {
                     '@type': 'PushedProperty',
                     'label': "Up",
