@@ -49,6 +49,38 @@ From "Settings" add-on menu:
 - Add "and enable add-on
 - Then add "SenseHat" from the things dashboard.
 
+### CALIBRATE ###
+
+For using Inertial measurement unit (IMU sensors),
+calibration will help to get more accurate measurements.
+
+```sh
+sudo apt-get install librtimulib-utils
+
+$ RTIMULibCal
+
+#| RTIMULibCal - using RTIMULib.ini
+#| Settings file not found. Using defaults and creating settings file
+#| Detected LSM9DS1 at standard/standard address
+#| Using fusion algorithm RTQF
+#| min/max compass calibration not in use
+#| Ellipsoid compass calibration not in use
+#| Accel calibration not in use
+#| LSM9DS1 init complete
+#| Options are: 
+#| m - calibrate magnetometer with min/max
+#| e - calibrate magnetometer with ellipsoid (do min/max first)
+#| a - calibrate accelerometers
+#| (...)
+
+sudo mv RTIMULib.ini  /etc/
+```
+
+If done correctly north should be indicated by edge where Ethernet and USB ports are located,
+the compass value is actually the "yaw" value, while "pitch" is around this same edge.
+Remaining "roll" value can be changed by rotating on longest middle axis of board.
+
+
 ## DEVELOP ##
 
 ```sh
