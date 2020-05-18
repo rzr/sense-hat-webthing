@@ -10,6 +10,8 @@ from gateway_addon import Device, Property
 
 _POLL_INTERVAL = 1
 
+_DEBUG = False
+
 class SenseHatImuDevice(Device):
     """SenseHat IMU device type."""
 
@@ -22,8 +24,7 @@ class SenseHatImuDevice(Device):
 
         Device.__init__(self, adapter, 'sense-hat-imu')
 
-        self._id = 'sense-hat-imu'
-        self.id = 'sense-hat-imu'
+        self._id = self.id = 'sense-hat-imu'
         self.adapter = adapter
         self.controller = adapter.controller
         self.controller.set_imu_config(True, True, True)
@@ -106,8 +107,10 @@ class SenseHatImuDevice(Device):
 
 
 class SenseHatImuProperty(Property):
+    """ Webthing property for motion sensors"""
 
     def __init__(self, device, name, description, value):
+        """ Initialize the object """
         Property.__init__(self, device, name, description)
         self.device = device
         self.title = name
@@ -117,16 +120,18 @@ class SenseHatImuProperty(Property):
         self.set_cached_value(value)
 
     def update(self):
+        """ read sensors values and notify """
         if self.name == 'pitch' or \
            self.name == 'roll' or \
            self.name == 'yaw':
             orientation = self.device.controller.orientation
             value = orientation[self.name] - 180.
+            if _DEBUG:
+                print("update: %s=%f" % (self.name, value))
         else:
-            if False:
+            if _DEBUG:
                 print("warning: %s update: not handled" % self.name)
             return
-        print("update: %s=%f" % (self.name, value))
         if value != self.value:
             self.set_cached_value(value)
             self.device.notify_property_changed(self)

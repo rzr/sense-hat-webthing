@@ -6,6 +6,7 @@
 from sense_hat import SenseHat
 from gateway_addon import Adapter
 from .sense_hat_device import SenseHatDevice
+from .sense_hat_imu_device import SenseHatImuDevice
 from .sense_hat_light_device import SenseHatLightDevice
 
 
@@ -32,10 +33,17 @@ class SenseHatAdapter(Adapter):
             device = SenseHatDevice(self)
             self.handle_device_added(device)
             if self.DEBUG:
-                 print("sense_hat_device created")
+                print("sense_hat_device created")
             self.devices[device.id].connected = True
             self.devices[device.id].connected_notify(True)
-            
+
+            imu_device = SenseHatImuDevice(self)
+            self.handle_device_added(imu_device)
+            if self.DEBUG:
+                print("sense_hat_imu_device created")
+            self.devices[imu_device.id].connected = True
+            self.devices[imu_device.id].connected_notify(True)
+
             lightDevice = SenseHatLightDevice(self)
             self.handle_device_added(lightDevice)
             if self.DEBUG:
