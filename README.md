@@ -57,7 +57,9 @@ calibration will help to get more accurate measurements.
 ```sh
 sudo apt-get install librtimulib-utils
 
-$ RTIMULibCal
+cd ~/.config/sense_hat/
+mv -f RTIMULib.ini RTIMULib.ini.orig
+RTIMULibCal
 
 #| RTIMULibCal - using RTIMULib.ini
 #| Settings file not found. Using defaults and creating settings file
@@ -73,12 +75,23 @@ $ RTIMULibCal
 #| a - calibrate accelerometers
 #| (...)
 
-sudo mv RTIMULib.ini  /etc/
+grep '=' RTIMULib.ini
 ```
 
-If done correctly north should be indicated by edge where Ethernet and USB ports are located,
+If done correctly north should be indicated by edge where power LED is located
 the compass value is actually the "yaw" value, while "pitch" is around this same edge.
 Remaining "roll" value can be changed by rotating on longest middle axis of board.
+
+
+### AUTOMATE ###
+
+Once added in gateway, it can be used along the rule engine:
+
+[![sense-hat-webthing](
+https://files.mastodon.social/media_attachments/files/028/864/302/original/65d944b18b347d04.png
+)](
+https://mastodon.social/@rzr/104052909544715058#LavalVirtual2020
+"sense-hat-webthing")
 
 
 ## DEVELOP ##
