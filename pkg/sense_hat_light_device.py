@@ -82,6 +82,18 @@ class SenseHatLightDevice(Device):
                 0)
             self.controller.set_rotation(0)
 
+            self.properties['dim'] = SenseHatProperty(
+                self,
+                'dim',
+                {
+                    '@type': 'BooleanProperty',
+                    'label': "Dim",
+                    'type': 'boolean',
+                    'description': 'Low light for dark environement',
+                },
+                False)
+            self.controller.low_light = False
+            
             self.pairing = True
             print("info: Adapter started")
 
@@ -146,6 +158,9 @@ class SenseHatProperty(Property):
                 return
             if value != self.value:
                 self.device.controller.set_rotation(value)
+
+        elif self.name == 'dim':
+            self.device.controller.low_light = value
 
         else:
             if _DEBUG:
