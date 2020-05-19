@@ -42,7 +42,7 @@ rule/version/%: manifest.json package.json setup.py
 
 
 rule/release/%: ${addons_json} rule/version/%
-	sed -e "s|\(\"version\":\)\([0-9.]*\)\(\".*\)|\1${@F}\3|g" -i $<
+	sed -e "s|\(.*\"version\": \)\"\(.*\)\"\(.*\)|\1\"${@F}\"\3|g" -i $<
 	sed -e "s|\(.*/${project}-\)\([0-9.]*\)\(-.*\)|\1${@F}\3|g" -i $<
 	cd ${<D} \
 && git --no-pager diff \
