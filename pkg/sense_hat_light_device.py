@@ -5,6 +5,8 @@
 
 from gateway_addon import Device, Property
 
+_DEBUG = False
+
 class SenseHatLightDevice(Device):
     """SenseHat device type."""
 
@@ -40,6 +42,8 @@ class SenseHatLightDevice(Device):
                     'type': 'string'
                 },
                 "")
+            self.controller.show_message("")
+
             self.properties['color'] = SenseHatProperty(
                 self,
                 "color",
@@ -50,6 +54,8 @@ class SenseHatLightDevice(Device):
                     'readOnly': False
                 },
                 '#ffffff')
+            self.controller.clear([0xFF, 0xFF, 0xFF])
+
             self.properties['on'] = SenseHatProperty(
                 self,
                 "on",
@@ -60,6 +66,8 @@ class SenseHatLightDevice(Device):
                     'readOnly': False
                 },
                 False)
+            self.controller.clear([0, 0, 0])
+
             self.properties['rotation'] = SenseHatProperty(
                 self,
                 "rotation",
@@ -72,12 +80,29 @@ class SenseHatLightDevice(Device):
                     'enum': [0, 90, 180, 270]
                 },
                 0)
+            self.controller.set_rotation(0)
 
             self.pairing = True
             print("info: Adapter started")
 
         except Exception as ex:
             print("error: Adding properties: " + str(ex))
+
+    @staticmethod
+    def hex_to_rgb(text):
+        """ Convert #RRBBGG to list of integer [0-255]"""
+        color = [int(text[1:3], 0x10),
+                 int(text[3:5], 0x10),
+                 int(text[5:7], 0x10)]
+        return color
+
+    @staticmethod
+    def invert_color(bg_color):
+        """ Invert color from list of integers"""
+        fg_color = [~ int(hex(bg_color[0]), 0x10) & 0xFF,
+                    ~ int(hex(bg_color[1]), 0x10) & 0xFF,
+                    ~ int(hex(bg_color[2]), 0x10) & 0xFF]
+        return fg_color
 
 class SenseHatProperty(Property):
 
@@ -91,35 +116,30 @@ class SenseHatProperty(Property):
         self.set_cached_value(value)
 
     def set_value(self, value):
-        print("info: sense_hat." + self.name + " from " + str(self.value) + " to " + str(value))
+        if _DEBUG:
+            print("info: sense_hat." + self.name + " from " + str(self.value) + " to " + str(value))
         if self.name == 'message':
             if not self.device.properties['on'].value:
-                bgColor = [0, 0, 0]
+                bg_color = [0, 0, 0]
             else:
-                colorString = self.device.properties['color'].value
-                bgColor = [int(colorString[1:3], 0x10),
-                           int(colorString[3:5], 0x10),
-                           int(colorString[5:7], 0x10)]
-            fgColor = [~ int(hex(bgColor[0]), 0x10) & 0xFF,
-                       ~ int(hex(bgColor[1]), 0x10) & 0xFF,
-                       ~ int(hex(bgColor[2]), 0x10) & 0xFF]
-            self.device.controller.show_message(value, 0.1, fgColor, bgColor)
+                text = self.device.properties['color'].value
+                bg_color = SenseHatLightDevice.hex_to_rgb(text)
+            fg_color = SenseHatLightDevice.invert_color(bg_color)
+            self.device.controller.show_message(value, 0.1, fg_color, bg_color)
 
         elif self.name == 'color':
-            if self.device.properties['on'].value and (value != self.value):
-                color = [int(value[1:3], 0x10),
-                         int(value[3:5], 0x10),
-                         int(value[5:7], 0x10)]
-                self.device.controller.clear(color)
+            if self.device.properties['on'].value:
+                bg_color = SenseHatLightDevice.hex_to_rgb(value)
+                self.device.controller.clear(bg_color)
+
         elif self.name == 'on':
             if value == False:
                 self.device.controller.clear([0, 0, 0])
             else:
-                colorString = self.device.properties['color'].value
-                color = [int(colorString[1:3], 0x10),
-                         int(colorString[3:5], 0x10),
-                         int(colorString[5:7], 0x10)]
-                self.device.controller.clear(color)
+                text = self.device.properties['color'].value
+                bg_color = SenseHatLightDevice.hex_to_rgb(text)
+                self.device.controller.clear(bg_color)
+
         elif self.name == 'rotation':
             if value != 0 and value != 90 and value != 180 and value != 270:
                 print("warning: rotation must be 0, 90, 180 or 270")
@@ -128,7 +148,8 @@ class SenseHatProperty(Property):
                 self.device.controller.set_rotation(value)
 
         else:
-            print("warning: %s not handled" % self.name)
+            if _DEBUG:
+                print("warning: %s not handled" % self.name)
             return
         if value != self.value:
             self.set_cached_value(value)
