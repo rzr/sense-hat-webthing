@@ -84,13 +84,45 @@ class SenseHatImuDevice(Device):
                 },
                 0)
 
+            self.properties['compass'] = SenseHatImuProperty(
+                self,
+                'compass',
+                {
+                    '@type': 'OnOffProperty',
+                    'label': "Compass",
+                    'type': 'boolean',
+                    'readOnly': False
+                },
+                True)
+
+            self.properties['gyro'] = SenseHatImuProperty(
+                self,
+                'gyro',
+                {
+                    '@type': 'OnOffProperty',
+                    'label': "Gyro",
+                    'type': 'boolean',
+                    'readOnly': False
+                },
+                True)
+
+            self.properties['accel'] = SenseHatImuProperty(
+                self,
+                'accel',
+                {
+                    '@type': 'OnOffProperty',
+                    'label': "Accel",
+                    'type': 'boolean',
+                    'readOnly': False
+                },
+                True)
+
             thread = threading.Thread(target=self.poll)
             thread.daemon = True
             thread.start()
 
             self.pairing = True
             print("info: Adapter started")
-
         except Exception as ex:
             print("error: Adding properties: " + str(ex))
 
@@ -134,5 +166,18 @@ class SenseHatImuProperty(Property):
                 print("warning: %s update: not handled" % self.name)
             return
         if value != self.value:
+            self.set_cached_value(value)
+            self.device.notify_property_changed(self)
+
+
+    def set_value(self, value):
+        """ En/Dis/able sensors """
+        if value != self.value:
+            config = {'compass_enabled': self.device.properties['compass'].value,
+                      'gyro_enabled': self.device.properties['gyro'].value,
+                      'accel_enabled': self.device.properties['accel'].value}
+            config[self.name + "_enabled"] = value
+            print(config)
+            self.device.controller.set_imu_config(**config)
             self.set_cached_value(value)
             self.device.notify_property_changed(self)
