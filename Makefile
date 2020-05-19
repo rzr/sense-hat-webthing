@@ -48,6 +48,34 @@ rule/release/%: ${addons_json} rule/version/%
 && git --no-pager diff \
 && git commit -am "${project}: Update to ${@F}"
 
+rule/urls: ${addons_json}
+	cat $< | jq '.packages[].url' | xargs -n1 echo \
+| while read url ; do curl -s -I "$${url}"; done
+
+
+tmp/checksums.lst: ${addons_json} # Makefile
+	@cat $< | jq '.packages[].url' | xargs -n1 echo \
+| while read url ; do curl -s -I "$${url}" | grep 'HTTP/1.1 200' > /dev/null \
+&& curl -s "$${url}" | sha256sum - ; done | cut -d' ' -f1 | tee $@.tmp
+	mv $@.tmp $@
+
+rule/checksum/update: ${addons_json} tmp/checksums.lst
+	cp -av "$<" "$<.tmp"
+	i=0; \
+  cat tmp/checksums.lst | while read sum ; do \
+  jq '.packages['$${i}'].checksum |= "'$${sum}'"' < $<.tmp  > $<.out.tmp ; \
+  mv "$<.out.tmp" "$<.tmp" ; \
+  i=$$(expr 1 + $${i}) ; \
+done
+	mv "$<.tmp" "$<"
+	cd ${<D} && git commit -sam "${project}: Update checksums from URLs"
+
+
+rule/wait:
+	while true ; do ${MAKE} rule/url | grep 'HTTP/1.1 200' && exit 0 ; done
+
+
+
 ${addons_json}:
 	mkdir -p "${addons_dir}"
 	git clone ${addons_url} "${addons_dir}"
