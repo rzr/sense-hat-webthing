@@ -38,8 +38,23 @@ class SenseHatImuDevice(Device):
                 'href': adapter.URL
             }
         ]
-        self._type = []
+        self._type = ['MultiLevelSensor']
         try:
+            self.properties['yaw'] = SenseHatImuProperty(
+                self,
+                'yaw',
+                {
+                    '@type': 'LevelProperty',
+                    'label': "Yaw",
+                    'type': 'number',
+                    'description': "Yaw Angle (North)",
+                    'unit': 'º',
+                    'minimum': -180,
+                    'maximum': 180,
+                    'readOnly': True
+                },
+                0)
+
             self.properties['pitch'] = SenseHatImuProperty(
                 self,
                 'pitch',
@@ -62,20 +77,6 @@ class SenseHatImuDevice(Device):
                     'label': "Roll",
                     'type': 'number',
                     'description': "Roll Angle",
-                    'unit': 'º',
-                    'minimum': -180,
-                    'maximum': 180,
-                    'readOnly': True
-                },
-                0)
-            self.properties['yaw'] = SenseHatImuProperty(
-                self,
-                'yaw',
-                {
-                    '@type': 'LevelProperty',
-                    'label': "Yaw",
-                    'type': 'number',
-                    'description': "Yaw Angle",
                     'unit': 'º',
                     'minimum': -180,
                     'maximum': 180,
