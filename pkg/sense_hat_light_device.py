@@ -5,7 +5,7 @@
 
 from gateway_addon import Device, Property
 
-_DEBUG = False
+_DEBUG = True
 
 class SenseHatLightDevice(Device):
     """SenseHat device type."""
@@ -33,6 +33,17 @@ class SenseHatLightDevice(Device):
         ]
         self._type = ['ColorControl', 'Light', 'OnOffSwitch']
         try:
+            self.properties['character'] = SenseHatProperty(
+                self,
+                'character',
+                {
+                    '@type': 'StringProperty',
+                    'label': "Character",
+                    'type': 'string'
+                },
+                "")
+            self.controller.show_letter("")
+
             self.properties['message'] = SenseHatProperty(
                 self,
                 "message",
@@ -93,12 +104,13 @@ class SenseHatLightDevice(Device):
                 },
                 False)
             self.controller.low_light = False
-            
+
             self.pairing = True
             print("info: Adapter started")
 
         except Exception as ex:
             print("error: Adding properties: " + str(ex))
+
 
     @staticmethod
     def hex_to_rgb(text):
@@ -116,7 +128,28 @@ class SenseHatLightDevice(Device):
                     ~ int(hex(bg_color[2]), 0x10) & 0xFF]
         return fg_color
 
+    def show(self, **kargs):
+        """ Refresh matrix light """
+        args = {}
+        for prop in self.properties.keys():
+            if prop not in kargs:
+                args[prop] = self.properties[prop].value
+            else:
+                args[prop] = kargs[prop]
+        character = str(args['character'] if args['character'] else " ")[0:1]
+        if args['on']:
+            bg_color = SenseHatLightDevice.hex_to_rgb(str(args['color']))
+            fg_color = SenseHatLightDevice.invert_color(bg_color)
+        else:
+            bg_color = [0, 0, 0]
+            fg_color = SenseHatLightDevice.hex_to_rgb(str(args['color']))
+
+        self.controller.show_letter(character, fg_color, bg_color)
+        if 'message' in kargs.keys():
+            self.controller.show_message(args['message'], 0.1, fg_color, bg_color)
+
 class SenseHatProperty(Property):
+    """ Matrix LCD parms"""
 
     def __init__(self, device, name, description, value):
         Property.__init__(self, device, name, description)
@@ -128,31 +161,12 @@ class SenseHatProperty(Property):
         self.set_cached_value(value)
 
     def set_value(self, value):
+        """ Handle properties changes """
         if _DEBUG:
             print("info: sense_hat." + self.name + " from " + str(self.value) + " to " + str(value))
-        if self.name == 'message':
-            if not self.device.properties['on'].value:
-                bg_color = [0, 0, 0]
-            else:
-                text = self.device.properties['color'].value
-                bg_color = SenseHatLightDevice.hex_to_rgb(text)
-            fg_color = SenseHatLightDevice.invert_color(bg_color)
-            self.device.controller.show_message(value, 0.1, fg_color, bg_color)
-
-        elif self.name == 'color':
-            if self.device.properties['on'].value:
-                bg_color = SenseHatLightDevice.hex_to_rgb(value)
-                self.device.controller.clear(bg_color)
-
-        elif self.name == 'on':
-            if value == False:
-                self.device.controller.clear([0, 0, 0])
-            else:
-                text = self.device.properties['color'].value
-                bg_color = SenseHatLightDevice.hex_to_rgb(text)
-                self.device.controller.clear(bg_color)
-
-        elif self.name == 'rotation':
+        if value == self.value:
+            return
+        if self.name == 'rotation':
             if value != 0 and value != 90 and value != 180 and value != 270:
                 print("warning: rotation must be 0, 90, 180 or 270")
                 return
@@ -163,9 +177,9 @@ class SenseHatProperty(Property):
             self.device.controller.low_light = value
 
         else:
-            if _DEBUG:
-                print("warning: %s not handled" % self.name)
-            return
-        if value != self.value:
-            self.set_cached_value(value)
-            self.device.notify_property_changed(self)
+            args = {}
+            args[self.name] = value
+            self.device.show(**args)
+
+        self.set_cached_value(value)
+        self.device.notify_property_changed(self)
