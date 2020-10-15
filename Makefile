@@ -31,10 +31,9 @@ unprep: /etc/debian_version
   python3-numpy python3-olefile python3-pil  python3-rtimulib python3-sense-hat
 
 
-rule/version/%: manifest.json package.json setup.py
+rule/version/%: manifest.json setup.py
 	-git describe --tags
 	sed -e "s|\(\"version\":\) .*|\1 \"${@F}\"|g" -i $<
-	sed -e "s|\(\"version\":\) .*|\1 \"${@F}\",|g" -i package.json
 	sed -e "s|\(.*version='\).*\('.*\)|\1${@F}\2|g" -i setup.py
 	-git commit -sm "Release ${@F}" $^
 	-git tag -sam "${project}-${@F}" "v${@F}" \
