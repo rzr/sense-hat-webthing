@@ -4,6 +4,7 @@
 """SenseHat adapter for Mozilla WebThings Gateway."""
 
 from gateway_addon import Device, Property
+from threading import Timer
 
 _DEBUG = True
 
@@ -21,6 +22,7 @@ class SenseHatLightDevice(Device):
         self.id = 'sense-hat-light'
         self.adapter = adapter
         self.controller = adapter.controller
+        self.controller_locked = False;
 
         self.name = 'SenseHatLight'
         self.description = 'Expose SenseHat actuators'
@@ -128,6 +130,9 @@ class SenseHatLightDevice(Device):
                     ~ int(hex(bg_color[2]), 0x10) & 0xFF]
         return fg_color
 
+    def controller_unlock():
+        self.controller_locked = False
+
     def show(self, **kargs):
         """ Refresh matrix light """
         args = {}
@@ -143,10 +148,23 @@ class SenseHatLightDevice(Device):
         else:
             bg_color = [0, 0, 0]
             fg_color = SenseHatLightDevice.hex_to_rgb(str(args['color']))
+        try:
+            if 'message' in kargs.keys():
+                message = kargs['message'] #
+                message.encode("ascii")
+                delay = len(message)
+                if not (bool(self.controller_locked)):
+                    self.controller_locked = True;
+                    def controller_unlock():
+                        self.controller_locked = False
+                    timer = Timer(delay, controller_unlock)
+                    timer.start()
+                    self.controller.show_message(message, 0.1, fg_color, bg_color)
+            else:
+                self.controller.show_letter(character, fg_color, bg_color)
+        except:
+            print("error: show failed");
 
-        self.controller.show_letter(character, fg_color, bg_color)
-        if 'message' in kargs.keys():
-            self.controller.show_message(args['message'], 0.1, fg_color, bg_color)
 
 class SenseHatProperty(Property):
     """ Matrix LCD parms"""
