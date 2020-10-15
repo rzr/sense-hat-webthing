@@ -7,6 +7,9 @@ version=$(grep '"version":' manifest.json | cut -d: -f2 | cut -d\" -f2)
 date=$(git log -1 --date=short --pretty=format:%cd 2>/dev/null \
            || date -u -r manifest.json)
 
+# Setup environment for building inside Dockerized toolchain
+[ $(id -u) = 0 ] && umask 0
+
 if [ -z "${ADDON_ARCH}" ]; then
   TARFILE_SUFFIX=
 else
