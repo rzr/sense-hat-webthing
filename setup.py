@@ -28,7 +28,7 @@ setup(
     url=URL,
     author='Philippe Coval',
     author_email='rzr@users.sf.net',
-    keywords='sensehat sense-hat RaspberryPi mozilla iot web thing webthing',
+    keywords='sensehat sense-hat RaspberryPi web thing webthing',
     packages=find_packages(),
     install_requires=requirements,
     classifiers=[

@@ -5,7 +5,7 @@
 default: help all
 
 project ?= sense-hat-adapter
-addons_url ?= https://github.com/mozilla-iot/addon-list
+addons_url ?= https://github.com/WebThingsIO/addon-list
 addons_dir ?= tmp/addon-list
 addons_json ?= ${addons_dir}/addons/sense-hat-adapter.json
 

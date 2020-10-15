@@ -1,6 +1,6 @@
 {
   "author": "Philippe Coval",
-  "description": "Sense Hat adapter plugin for Mozilla WebThings Gateway",
+  "description": "Sense Hat adapter plugin for WebThings Gateway",
   "gateway_specific_settings": {
     "webthings": {
       "exec": "python3 {path}/main.py",

@@ -21,7 +21,7 @@ https://img.shields.io/mastodon/follow/279303?domain=https%3A%2F%2Fmastodon.soci
 
 ## ABOUT ##
 
-Addon adapter for Mozilla IoT Gateway 
+Addon adapter for WebThings Gateway 
 using python module to handle I2C sensors and GPIOs
 of Raspberry Pi's extension board "SenseHat".
 
@@ -35,8 +35,8 @@ https://mastodon.social/@rzr/104143644945748115#:sensehat:
 
 ### PREREQUISITES ###
 
-Install mozilla WebThing gateway on RaspberryPI (It was made for 
-https://github.com/mozilla-iot/gateway/releases/download/0.12.0/gateway-0.12.0.img.zip
+Install WebThings Gateway on RaspberryPI (It was made for 
+https://github.com/WebThingsIO/gateway/releases/download/0.12.0/gateway-0.12.0.img.zip
 )
 
 - Connect to device's wifi "WebThings Gateway FFFF" and then open http://gateway.local/,  Setup WiFi Setup
@@ -147,12 +147,12 @@ Thanks to Geof Cohler (@gcohler) for support.
 - <https://libraries.io/pypi/sense-hat-webthing>
 - <https://pypi.org/project/sense-hat-webthing/>
 - <https://mastodon.social/@rzr/104052909544715058#LavalVirtual2020>
-- <https://github.com/mozilla-iot/addon-list/pull/822>
+- <https://github.com/WebThingsIO/addon-list/pull/822>
 - <https://discourse.mozilla.org/t/is-there-an-add-on-for-pi-sense-hat/58024/5>
 - <https://www.openhub.net/p/sense-hat-webthing>
 - <https://github.com/rzr/mozilla-iot-generic-sensors-adapter/issues/13>
-- <https://github.com/mozilla-iot/wiki/wiki#general-1>
-- <https://github.com/mozilla-iot/gateway-addon-python>
+- <https://github.com/WebThingsIO/wiki/wiki#general-1>
+- <https://github.com/WebThingsIO/gateway-addon-python>
 - <https://hacks.mozilla.org/2018/02/creating-an-add-on-for-the-project-things-gateway/>
 - <https://libraries.io/pypi/sense-hat>
 - <https://www.raspberrypi.org/products/sense-hat/>
@@ -162,9 +162,9 @@ Thanks to Geof Cohler (@gcohler) for support.
 - <https://github.com/raspberrypi/rpi-sense/>
 - <https://projects.raspberrypi.org/en/projects/getting-started-with-the-sense-hat>
 - <https://iot.mozilla.org/schemas/>
-- <https://github.com/mozilla-iot/webthing-python/>
-- <https://github.com/mozilla-iot/tplink-adapter>
-- <https://github.com/mozilla-iot/eufy-adapter>
+- <https://github.com/WebThingsIO/webthing-python/>
+- <https://github.com/WebThingsIO/tplink-adapter>
+- <https://github.com/WebThingsIO/eufy-adapter>
 
 [![sense-hat-webthing](
 https://files.mastodon.social/media_attachments/files/027/879/770/small/2711ddf5ac31f8bf.jpeg#./file/sense-hat-webthing.jpg

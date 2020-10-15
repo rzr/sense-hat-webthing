@@ -1,7 +1,7 @@
 # -*- mode: python; python-indent-offset: 4; indent-tabs-mode: nil -*-
 # SPDX-License-Indentifier: MPL-2.0
 
-"""SenseHat adapter for Mozilla WebThings Gateway."""
+"""SenseHat adapter for WebThings Gateway."""
 
 import threading
 import time
